@@ -1,0 +1,23 @@
+body{
+    width: 100%;
+    height: 100%;
+    background-color: #b7d1fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#conteudo{
+    width: 80%;
+    height: 80%;
+    background-color: gray;
+    padding: 25px;
+}
+
+#forms{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
+}
