@@ -12,10 +12,20 @@ body {
     overflow-y: auto;
     overflow-x: hidden; /* Evita overflow horizontal */
 }
+
+#conteudo {
+    width: 90%;
+    background-color: #57737A;
+    padding: 20px; /* Diminuído para compactar o espaço interno */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    overflow-x: hidden; /* Garante que não haja overflow horizontal */
+}
+
 #linha {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     background-color: #435A5E;
     padding: 8px;
     border-radius: 8px;
@@ -25,29 +35,28 @@ body {
 .inputs {
     flex: 1; /* Garante que todos os .inputs ocupem o mesmo espaço disponível */
     margin: 4px;
-    max-width: 160px; /* Ajusta para manter a largura uniforme */
-    min-width: 160px; /* Mantém o mesmo tamanho mínimo */
-    height: 100px;
-    box-sizing: border-box; /* Garante que padding e borda sejam incluídos na largura */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-mat-form-field {
-    width: 100%; /* Garante que o campo de formulário ocupe toda a largura do .inputs */
-    font-size: 1em;
+    max-width: 16em;
 }
 
 .mat-select-panel {
     font-size: 1em;
 }
 
+mat-hint{
+    color: rgb(255, 56, 56);
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.direita{
+    text-align: right;
+}
+
 .delete {
-    margin: 0;
+    margin: 4px;
     padding: 0;
-    width: 20px;
-    height: 20px;
+    width: 2.5em;
+    height: 2.5em;
 }
 
 .delete.mat-icon{
@@ -61,22 +70,6 @@ mat-form-field {
 button {
     padding: 4px 8px;
     font-size: 0.85em;
-}
-
-h2 {
-    font-size: 0.7em;
-    margin: 5px 0;
-}
-
-#conteudo {
-    width: 100%;
-    max-width: 1000px;
-    background-color: #57737A;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    overflow-x: hidden;
 }
 
 #botoes {
@@ -103,4 +96,15 @@ button.mat-flat-button {
 
 button.mat-flat-button:hover {
     background-color: #2c6f8f;
+}
+
+#baixo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+#baixo div{
+    margin-top: 30px;
 }

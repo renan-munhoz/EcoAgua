@@ -15,9 +15,8 @@
     <div id="forms">
       <div *ngFor="let fonte of fontesConsumo; let i = index" id="linha">
         <button mat-fab color="warn" (click)="removerFonte(i)" class="delete"> <mat-icon>highlight_remove</mat-icon> </button>
-        <div id="fontes" class="inputs">
-          <h2>FONTE DE CONSUMO {{i + 1}}</h2>
-          <mat-form-field>
+
+          <mat-form-field id="fontes" class="inputs">
             <mat-label>Fonte de Consumo</mat-label>
             <mat-select [(ngModel)]="fonte.fonte" class="mat-select-panel">
               <mat-optgroup *ngFor="let categoria of categoriasFonte" [label]="categoria.categoria">
@@ -26,57 +25,59 @@
                 </mat-option>
               </mat-optgroup>
             </mat-select>
-            
           </mat-form-field>
-        </div>
 
-        <div id="vezes_semana" class="inputs">
-          <h2>VEZES POR SEMANA</h2>
-          <mat-form-field >
-            <mat-label>Vezes po Semana</mat-label>
-            <mat-select [(ngModel)]="vezes.vezes" class="mat-select-panel">
-              <mat-option *ngFor="let opcao of opcoesVezes" [value]="opcao.value">
+          <mat-form-field id="modificador_semana" class="inputs">
+            <mat-label>vezes por Semana</mat-label>
+            <mat-select [(ngModel)]="fonte.consumoSemanal" class="mat-select-panel">
+              <mat-option *ngFor="let opcao of opcoesmodificador" [value]="opcao.value">
                 {{ opcao.label }}
               </mat-option>
             </mat-select>
-            
-            
           </mat-form-field>
-        </div>
-  
-        <div id="tempo" class="inputs">
-          <h2>TEMPO DIARIO DE USO</h2>
-          <mat-form-field >
+
+          <mat-form-field id="tempo" class="inputs">
             <mat-label>tempo diario de uso</mat-label>
-            <input matInput type="number" min="0" [(ngModel)]="fonte.tempoDiario" placeholder="0">
-            <span matTextSuffix> minutos </span>
+            <input matInput type="number" min="1" [(ngModel)]="fonte.tempo" placeholder="1" class="direita"
+            [disabled]="(fonte.fonte === 'banho_banheira' || fonte.fonte === 'escovar_dentes' || fonte.fonte === 'vaso_sanitario' || fonte.fonte === 'lavar_loucas_maquina' || fonte.fonte === 'lavar_quintal_balde')">
+            <span matTextSuffix> min </span>
+            <mat-hint>Maquinas são contadas por ciclos ^</mat-hint>
           </mat-form-field>
-        </div>
-  
-        <div id="consumo-dia" class="inputs">
-          <h2>CONSUMO DIARIO EM LITROS</h2>
-          <mat-form-field>
-            <mat-label>Input</mat-label>
-            <input matInput readonly [(ngModel)]="fonte.consumoDiario">
+
+          <mat-form-field id="quantidade" class="inputs">
+            <mat-label>quantidade por dia usado</mat-label>
+            <input matInput type="number" min="1" [(ngModel)]="fonte.modificador" placeholder="1" class="direita">
+            <span matTextSuffix> vez(es) </span>
+          </mat-form-field>
+
+          <mat-form-field id="consumo-dia" class="inputs">
+            <mat-label>consumo diario em litros</mat-label>
+            <input matInput readonly [(ngModel)]="fonte.consumo" class="direita">
             <span matTextSuffix> L</span>
           </mat-form-field>
-        </div>
-  
-        <div id="consumo-mes" class="inputs">
-          <h2>CONSUMO MENSAL EM LITROS</h2>
-          <mat-form-field>
-            <mat-label>Input</mat-label>
-            <input matInput readonly [(ngModel)]="fonte.consumoMensal">
+
+          <mat-form-field id="consumo-mes" class="inputs">
+            <mat-label>consumo mensal em litros</mat-label>
+            <input matInput readonly [(ngModel)]="fonte.consumoMensal" class="direita">
             <span matTextSuffix> L</span>
           </mat-form-field>
-        </div>
       </div>
     </div>
+
+    <div id="baixo">
     <div id="botoes">
       <button mat-flat-button (click)="adicionarFonte()">Adicionar Fonte</button>
-      <button mat-flat-button id="calcular"> Calcular </button>
+      <button mat-flat-button id="calcular" (click)="calcular()"> Calcular </button>
     </div>
-    
+
+      <div>
+        <mat-form-field id="consumo-mes" class="inputs">
+        <mat-label>Total por Mes</mat-label>
+        <input matInput readonly [(ngModel)]="total" class="direita"> 
+        <span matTextSuffix> L</span>
+      </mat-form-field>
+      </div>
+  </div>
   </div>
   
 </body>
