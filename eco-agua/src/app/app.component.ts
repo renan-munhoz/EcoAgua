@@ -29,6 +29,19 @@ export class AppComponent {
   modificador = { modificador: ''};
   fonteSelecionado = '';
   modificadorSelecionado = '';
+  fontesUsadas = { 
+    lavar_roupa_maquina: false,
+    lavar_roupa_tanque: false,
+    banho_banheira: false,
+    banho_chuveiro: false,
+    escovar_dentes: false,
+    vaso_sanitario: false,
+    lavar_loucas_maquina: false,
+    lavar_loucas_pia: false,
+    lavar_quintal_balde: false,
+    lavar_quintal_mangueira: false,
+    piscina: false
+   }
 
   opcoesmodificador = [
     { value: 1, label: 'Uma Vez' },
@@ -84,7 +97,46 @@ export class AppComponent {
     this.fontesConsumo.push({ fonte: '', consumoSemanal: 0, tempo: 1, modificador: 1, consumo: 0, consumoMensal: 0 });
   }
 
+  onFonteChange(fonte: string){
+    console.log(fonte)
+  }
+
   removerFonte(index: number) {
+    console.log(this.fontesConsumo.at(index)?.fonte)
+    if(this.fontesConsumo.at(index)?.fonte !== ''){
+      switch(this.fontesConsumo.at(index)?.fonte){
+        case 'lavar_roupa_maquina':
+        this.fontesUsadas.lavar_roupa_maquina = false
+        break
+      case 'lavar_roupa_tanque':
+        this.fontesUsadas.lavar_roupa_tanque = false
+        break
+      case 'banho_banheira':
+        this.fontesUsadas.banho_banheira = false
+        break
+      case 'banho_chuveiro':
+        this.fontesUsadas.banho_chuveiro = false
+        break
+      case 'escovar_dentes':
+        this.fontesUsadas.escovar_dentes = false
+        break
+      case 'vaso_sanitario':
+        this.fontesUsadas.vaso_sanitario = false
+        break
+      case 'lavar_loucas_maquina':
+        this.fontesUsadas.lavar_loucas_maquina = false
+        break
+      case 'lavar_loucas_pia':
+        this.fontesUsadas.lavar_loucas_pia = false
+        break
+      case 'lavar_quintal_balde':
+        this.fontesUsadas.lavar_quintal_balde = false
+        break
+      case 'lavar_quintal_mangueira':
+        this.fontesUsadas.lavar_quintal_mangueira = false
+        break
+      }
+    }
     this.fontesConsumo.splice(index, 1);
   }
 
@@ -94,7 +146,40 @@ export class AppComponent {
   */
 
   calcular() {
+    this.total = 0
     this.fontesConsumo.forEach(fonte => {
+      switch(fonte.fonte){
+        case 'lavar_roupa_maquina':
+        this.fontesUsadas.lavar_roupa_maquina = true
+        break
+      case 'lavar_roupa_tanque':
+        this.fontesUsadas.lavar_roupa_tanque = true
+        break
+      case 'banho_banheira':
+        this.fontesUsadas.banho_banheira = true
+        break
+      case 'banho_chuveiro':
+        this.fontesUsadas.banho_chuveiro = true
+        break
+      case 'escovar_dentes':
+        this.fontesUsadas.escovar_dentes = true
+        break
+      case 'vaso_sanitario':
+        this.fontesUsadas.vaso_sanitario = true
+        break
+      case 'lavar_loucas_maquina':
+        this.fontesUsadas.lavar_loucas_maquina = true
+        break
+      case 'lavar_loucas_pia':
+        this.fontesUsadas.lavar_loucas_pia = true
+        break
+      case 'lavar_quintal_balde':
+        this.fontesUsadas.lavar_quintal_balde = true
+        break
+      case 'lavar_quintal_mangueira':
+        this.fontesUsadas.lavar_quintal_mangueira = true
+        break
+      }
       this.calcular_consumo_diario(fonte);
     });
     console.log(this.total)
@@ -163,5 +248,47 @@ export class AppComponent {
     consumo = consumoDiarioCalc * consumoSemanalCalc * 4
 
     return consumo
+  }
+
+  
+  get_media_mensal(fonte:string){
+    let media = 0;
+    switch(fonte){
+      case 'lavar_roupa_maquina':
+        media = 480
+        break
+      case 'lavar_roupa_tanque':
+        media = 6696
+        break
+      case 'banho_banheira':
+        media = 320
+        break
+      case 'banho_chuveiro':
+        media = 7200
+        break
+      case 'escovar_dentes':
+        media = 135
+        break
+      case 'vaso_sanitario':
+        media = 1200
+        break
+      case 'lavar_loucas_maquina':
+        media = 900
+        break
+      case 'lavar_loucas_pia':
+        media = 10530
+        break
+      case 'lavar_quintal_balde':
+        media = 420
+        break
+      case 'lavar_quintal_mangueira':
+        media = 2300
+        break
+      /*case 'piscina':
+        media = ''
+        break*/
+    }
+
+    return media
   }
 }
