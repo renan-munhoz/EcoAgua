@@ -11,6 +11,28 @@ body {
     font-family: Arial, sans-serif;
     overflow-y: auto;
     overflow-x: hidden; /* Evita overflow horizontal */
+    text-align: justify;
+}
+
+#topo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#topo h1{
+    font-size: 54px;
+    margin: 40px;
+    font-weight: bolder;
+    color: white;
+}
+
+#topo p{
+    color: white;
+    font-size: 22px;
+    max-width: 65%;
+    padding: 30px;
+    line-height: 1.2em;
 }
 
 #conteudo {
@@ -30,6 +52,7 @@ body {
     padding: 8px;
     border-radius: 8px;
     gap: 8px;
+    margin-bottom: 10px;
 }
 
 .inputs {
@@ -107,4 +130,12 @@ button.mat-flat-button:hover {
 
 #baixo div{
     margin-top: 30px;
+}
+
+#recomendacoes div{
+    background-color: white;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

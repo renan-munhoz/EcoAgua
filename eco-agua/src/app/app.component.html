@@ -11,7 +11,9 @@
   <div id="conteudo">
     <div id="topo">
       <h1>Eco Agua</h1>
-      <p>bla bla bla...</p>
+      <p>O projeto Eco Agua é uma ferramenta para ajudar o controle do consumo de água em residencias, o sistema foi desenvolvido para 
+        o projeto de extensão da Universidade Filadélfia de Londrina, Paraná.
+      </p>
     </div>
 
     <div id="forms">
@@ -23,34 +25,48 @@
           <mat-label>Fonte de Consumo</mat-label>
           <mat-select [(ngModel)]="fonte.fonte" (ngModelChange)="onFonteChange(fonte.fonte)" class="mat-select-panel">
             <mat-optgroup *ngFor="let categoria of categoriasFonte" [label]="categoria.categoria">
-              <mat-option *ngFor="let opcao of categoria.opcoes" [value]="opcao.value">
+              <mat-option *ngFor="let opcao of categoria.opcoes"  [value]="opcao.value">
                 {{ opcao.label }}
               </mat-option>
             </mat-optgroup>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field id="modificador_semana" class="inputs">
+        <mat-form-field id="modificador_semana" *ngIf="!(fonte.fonte === 'piscina')"  class="inputs">
           <mat-label>vezes por Semana</mat-label>
-          <mat-select [(ngModel)]="fonte.consumoSemanal" class="mat-select-panel">
-            <mat-option *ngFor="let opcao of opcoesmodificador" [value]="opcao.value">
+          <mat-select [(ngModel)]="fonte.consumoSemanal"  class="mat-select-panel">
+            <mat-option *ngFor="let opcao of opcoesmodificador"  [value]="opcao.value">
               {{ opcao.label }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field id="tempo" class="inputs">
+        <mat-form-field id="modificador_mes" *ngIf="(fonte.fonte === 'piscina')"  class="inputs">
+          <mat-label>vezes por Mês</mat-label>
+          <mat-select [(ngModel)]="fonte.consumoSemanal"  class="mat-select-panel">
+            <mat-option *ngFor="let opcao of opcoesmodificadorMensal"  [value]="opcao.value">
+              {{ opcao.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="tempo" class="inputs" *ngIf="!(fonte.fonte === 'lavar_loucas_maquina' || fonte.fonte === 'lavar_roupa_maquina')">
           <mat-label>tempo diario de uso</mat-label>
           <input matInput type="number" min="1" [(ngModel)]="fonte.tempo" placeholder="1" class="direita"
-            [disabled]="(fonte.fonte === 'banho_banheira' || fonte.fonte === 'escovar_dentes' || fonte.fonte === 'vaso_sanitario'  || fonte.fonte === 'lavar_quintal_balde')">
+            [disabled]="(fonte.fonte === 'piscina' || fonte.fonte === 'banho_banheira' || fonte.fonte === 'escovar_dentes' || fonte.fonte === 'vaso_sanitario'  || fonte.fonte === 'lavar_quintal_balde')">
           <span matTextSuffix> min </span>
-          <mat-hint *ngIf="(fonte.fonte === 'lavar_loucas_maquina' || fonte.fonte === 'lavar_roupa_maquina')">Maquinas
-            são contadas por ciclos ^</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field class="tempo" class="inputs" *ngIf="(fonte.fonte === 'lavar_loucas_maquina' || fonte.fonte === 'lavar_roupa_maquina')">
+          <mat-label>tempo diario de uso</mat-label>
+          <input matInput type="number" min="1" [(ngModel)]="fonte.tempo" placeholder="1" class="direita">
+          <span matTextSuffix> ciclos </span>
         </mat-form-field>
 
         <mat-form-field id="quantidade" class="inputs">
           <mat-label>quantidade por dia usado</mat-label>
-          <input matInput type="number" min="1" [(ngModel)]="fonte.modificador" placeholder="1" class="direita">
+          <input matInput type="number" min="1" [(ngModel)]="fonte.modificador" placeholder="1" class="direita"
+          [disabled]="(fonte.fonte === 'piscina')">
           <span matTextSuffix> vez(es) </span>
         </mat-form-field>
 
@@ -84,61 +100,118 @@
     </div>
 
     <div id="recomendacoes">
-      <div id="rec_lavar_roupa_maquina" *ngIf="fontesUsadas.lavar_roupa_maquina === true">
+      <div id="rec_lavar_roupa_maquina" *ngIf="fontesCalculadas.includes('lavar_roupa_maquina')">
         <h2>Lavar Roupa na Maquina</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
+        <p>     Escolha uma lavadora de tamanho adequado ao número de pessoas que vivem na sua casa. Uma máquina grande demais 
+          para pouca gente pode gastar mais água do que o necessário, enquanto uma pequena demais para a sua família resulta 
+          em mais lavagens, portanto, maior consumo de água.</p>
+        <p>A tecnologia pode ser aliada da economia. Há modelos de lavadora capazes de pesar as roupas no início do ciclo de 
+          lavagem e ajustar a quantidade de água necessária, evitando desperdício. Essa pode ser uma boa opção para sua lavanderia.</p>
       </div>
-
-      <div id="rec_lavar_roupa_tanque" *ngIf="fontesUsadas.lavar_roupa_tanque === true">
+    
+      <div id="rec_lavar_roupa_tanque" *ngIf="fontesCalculadas.includes('lavar_roupa_tanque')">
         <h2>Lavar Roupa no Tanque</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
-      </div>
+        <p> No tanque, feche a torneira enquanto ensaboa e esfrega a roupa.</p>
 
-      <div id="rec_banho_banheira" *ngIf="fontesUsadas.banho_banheira === true">
+        <p>  Use sabão na dose certa. Exagerar na quantidade vai requerer muito mais água para o enxágue.</p>
+          
+        <p>  Fique de olho nos vazamentos. Uma torneira pingando na lavanderia pode gastar até 45 litros de água por dia.</p>
+          
+        <p>  Reutilize a água do tanquinho ou do molho das roupas para lavar o quintal, o carro e a calçada.</p>
+      </div>
+    
+      <div id="rec_banho_banheira" *ngIf="fontesCalculadas.includes('banho_banheira')">
         <h2>Banho de Banheira</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
+        <p> Encha a banheira apenas até a altura necessária para cobrir o corpo. </p>
+        <p> Evite encher a banheira até a borda, pois isso resultará em desperdício de água quando você entrar. </p>
+        <p> Use um filtro para reciclar a água da banheira, permitindo que você a reutilize para regar plantas ou lavar o quintal.</p>
       </div>
-
-      <div id="rec_banho_chuveiro" *ngIf="fontesUsadas.banho_chuveiro === true">
+    
+      <div id="rec_banho_chuveiro" *ngIf="fontesCalculadas.includes('banho_chuveiro')">
         <h2>Banho de Chuveiro</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
-      </div>
+        <p> Estabeleça uma duração padrão para seu banho. O ideal é que ele não ultrapasse 6 minutos;</p>
 
-      <div id="rec_escovar_dentes" *ngIf="fontesUsadas.escovar_dentes === true">
+        <p>  Desligue o chuveiro enquanto você se ensaboa;</p>
+          
+        <p>  Lembre-se que um banho por dia é suficiente. Você raramente precisa de mais do que isso;</p>
+          
+        <p>  Fique de olho na manutenção do seu chuveiro. Vazamentos podem gastar muitos litros de água de maneira quase que imperceptível;</p>
+          
+        <p>  Feche bem a torneira, mesmo que não haja vazamentos evidentes no chuveiro. Gotejamentos podem causar grande desperdício 
+          se você não fechar a torneira corretamente</p>
+      </div>
+    
+      <div id="rec_escovar_dentes" *ngIf="fontesCalculadas.includes('escovar_dentes')">
         <h2>Escovar os Dentes</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
-      </div>
+        <p> Uma dica muito simples: abra a torneira apenas quando necessário. Você pode molhar a escova e a pasta, 
+          escovar bem os dentes com a torneira fechada e só abrir de novo para enxaguar.</p>
 
-      <div id="rec_vaso_sanitario" *ngIf="fontesUsadas.vaso_sanitario === true">
+        <p> Outra forma de economizar água escovando os dentes é utilizar um copo. Encha o copo de água e deixe no balcão da pia. 
+          Escove normalmente os dentes e depois pode enxaguar a boca e a escova usando apenas a água do copo.</p>
+      </div>
+    
+      <div id="rec_vaso_sanitario" *ngIf="fontesCalculadas.includes('vaso_sanitario')">
         <h2>Vaso Sanitário</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
+        <p>  	Nunca jogue cigarros, absorventes ou papéis no vaso, porque haverá maior consumo de água para mandar esse lixo embora.</p>
       </div>
-
-      <div id="rec_lavar_loucas_maquina" *ngIf="fontesUsadas.lavar_loucas_maquina === true">
+    
+      <div id="rec_lavar_loucas_maquina" *ngIf="fontesCalculadas.includes('lavar_loucas_maquina')">
         <h2>Lavar Louças na Maquina</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
+        <p>Antes de lavar a louça, retire bem os restos de comida</p>
+        <p>Deixe a louça de molho com detergente</p>
+        <p>Utilize a máquina de lavar louça apenas quando ela estiver cheia</p>
+        <p>Use vinagre para tirar odores indesejáveis dos copos</p>
+        <p>Evite guardar alimentos gordurosos em potes plásticos</p>
+        <p>Você pode usar bicarbonato para remover a gordura da louça</p>
       </div>
-
-      <div id="rec_lavar_loucas_pia" *ngIf="fontesUsadas.lavar_loucas_pia === true">
+    
+      <div id="rec_lavar_loucas_pia" *ngIf="fontesCalculadas.includes('lavar_loucas_pia')">
         <h2>Lavar Louças na Pia</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
+        <p>Atenção na ordem para lavar a louça</p>
+        <p>Utilize água quente para lavar louça engordurada</p>
+        <p>Prefira beber água em garrafas próprias</p>
+        <p>Utilize a máquina de lavar louça apenas quando ela estiver cheia</p>
+        <p>Você pode usar bicarbonato para remover a gordura da louça</p>
       </div>
-
-      <div id="rec_lavar_quintal_balde" *ngIf="fontesUsadas.lavar_quintal_balde === true">
+    
+      <div id="rec_lavar_quintal_balde" *ngIf="fontesCalculadas.includes('lavar_quintal_balde')">
         <h2>Lavar Quintal com Baldes</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
+        <p> Varrer antes de lavar. Retire folhas, sujeira, assim como detritos com uma vassoura. 
+          Então, avalie se o local precisa mesmo ser lavado. Reduza o desperdício para economizar água.</p>
+        <p>Limitar a área de lavagem. Concentre-se apenas nas áreas que realmente precisam de limpeza.</p>
+        <p>Escolher a hora certa. Lave o quintal durante as horas mais frescas do dia. Dessa forma, 
+            a água vai demorar mais para evaporar durante a limpeza.</p>
+        <p>Reaproveitar a água. Colete a água da chuva em baldes ou recipientes, 
+              pois ela poderá ser usada para regar as plantas ou limpar o quintal.</p>
+        <p>Usar esfregão de alta absorção. Dependendo do piso, dá para limpar superfícies mais 
+                sujas com esfregões e vassouras inteligentes.</p>
       </div>
-
-      <div id="rec_lavar_quintal_mangueira" *ngIf="fontesUsadas.lavar_quintal_mangueira === true">
+    
+      <div id="rec_lavar_quintal_mangueira" *ngIf="fontesCalculadas.includes('lavar_quintal_mangueira')">
         <h2>Lavar Quintal com Manguieras</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
+        <p> Varrer antes de lavar. Retire folhas, sujeira, assim como detritos com uma vassoura. 
+        Então, avalie se o local precisa mesmo ser lavado. Reduza o desperdício para economizar água.</p>
+        <p>Limitar a área de lavagem. Concentre-se apenas nas áreas que realmente precisam de limpeza.</p>
+        <p>Escolher a hora certa. Lave o quintal durante as horas mais frescas do dia. Dessa forma, 
+        a água vai demorar mais para evaporar durante a limpeza.</p>
+        <p>Reaproveitar a água. Colete a água da chuva em baldes ou recipientes, 
+        pois ela poderá ser usada para regar as plantas ou limpar o quintal.</p>
+        <p>Usar esfregão de alta absorção. Dependendo do piso, dá para limpar superfícies mais 
+        sujas com esfregões e vassouras inteligentes.</p>
+        <p>Usar balde em vez de mangueira. Isso pode reduzir significativamente o desperdício de água. 
+        Em áreas menores, é possível usar regadores.</p>
       </div>
-
-      <div id="rec_piscina" *ngIf="fontesUsadas.piscina === true">
+    
+      <div id="rec_piscina" *ngIf="fontesCalculadas.includes('piscina')">
         <h2>Piscina</h2>
-        <p> bla bla bla gggg blblblb mmmm</p>
+        <p>  Verifique a existência de vazamentos.</p>
+        <p>  Reduza a evaporação para economizar água.</p>
+        <p>  Ao encher a piscina, cuidado com o transbordo!</p>
+        <p>  Manutenção de bomba e filtros.</p>
+        <p>  Limpeza com cloro para piscina.</p>
       </div>
     </div>
+    
   </div>
 
 </body>

@@ -29,6 +29,8 @@ export class AppComponent {
   modificador = { modificador: ''};
   fonteSelecionado = '';
   modificadorSelecionado = '';
+  fontesCalculadas: string[] = [];
+
   fontesUsadas = { 
     lavar_roupa_maquina: false,
     lavar_roupa_tanque: false,
@@ -51,6 +53,13 @@ export class AppComponent {
     { value: 5, label: 'Cinco Vezes' },
     { value: 6, label: 'Seis Vezes' },
     { value: 7, label: 'Todos os Dias' },
+  ];
+
+  opcoesmodificadorMensal = [
+    { value: 1, label: 'Uma Vez' },
+    { value: 2, label: 'Duas Vezes' },
+    { value: 3, label: 'Tres Vezes' },
+    { value: 4, label: 'Toda Semana' },
   ];
 
   categoriasFonte = [
@@ -82,7 +91,7 @@ export class AppComponent {
       opcoes: [
         { value: 'lavar_quintal_balde', label: 'Lavar o Quintal (Baldes)' },
         { value: 'lavar_quintal_mangueira', label: 'Lavar o Quintal (Mangueira)' },
-        { value: 'piscina', label: 'Piscina' }
+        { value: 'piscina', label: 'Encher a Piscina' }
       ]
     }
   ];
@@ -94,7 +103,7 @@ export class AppComponent {
   ];
 
   adicionarFonte() {
-    this.fontesConsumo.push({ fonte: '', consumoSemanal: 0, tempo: 1, modificador: 1, consumo: 0, consumoMensal: 0 });
+    this.fontesConsumo.push({ fonte: '', consumoSemanal: 0, tempo: 1, modificador: 1, consumo: 1, consumoMensal: 1 });
   }
 
   onFonteChange(fonte: string){
@@ -135,6 +144,9 @@ export class AppComponent {
       case 'lavar_quintal_mangueira':
         this.fontesUsadas.lavar_quintal_mangueira = false
         break
+      case 'piscina':
+        this.fontesUsadas.piscina = false
+        break
       }
     }
     this.fontesConsumo.splice(index, 1);
@@ -146,44 +158,63 @@ export class AppComponent {
   */
 
   calcular() {
-    this.total = 0
+    this.total = 0;
+    this.fontesCalculadas = []; // Limpar fontes calculadas antes de iniciar o cálculo
+  
     this.fontesConsumo.forEach(fonte => {
-      switch(fonte.fonte){
+      // Marcar as fontes usadas como true e adicioná-las à lista de fontes calculadas
+      switch (fonte.fonte) {
         case 'lavar_roupa_maquina':
-        this.fontesUsadas.lavar_roupa_maquina = true
-        break
-      case 'lavar_roupa_tanque':
-        this.fontesUsadas.lavar_roupa_tanque = true
-        break
-      case 'banho_banheira':
-        this.fontesUsadas.banho_banheira = true
-        break
-      case 'banho_chuveiro':
-        this.fontesUsadas.banho_chuveiro = true
-        break
-      case 'escovar_dentes':
-        this.fontesUsadas.escovar_dentes = true
-        break
-      case 'vaso_sanitario':
-        this.fontesUsadas.vaso_sanitario = true
-        break
-      case 'lavar_loucas_maquina':
-        this.fontesUsadas.lavar_loucas_maquina = true
-        break
-      case 'lavar_loucas_pia':
-        this.fontesUsadas.lavar_loucas_pia = true
-        break
-      case 'lavar_quintal_balde':
-        this.fontesUsadas.lavar_quintal_balde = true
-        break
-      case 'lavar_quintal_mangueira':
-        this.fontesUsadas.lavar_quintal_mangueira = true
-        break
+          this.fontesUsadas.lavar_roupa_maquina = true;
+          this.fontesCalculadas.push('lavar_roupa_maquina');
+          break;
+        case 'lavar_roupa_tanque':
+          this.fontesUsadas.lavar_roupa_tanque = true;
+          this.fontesCalculadas.push('lavar_roupa_tanque');
+          break;
+        case 'banho_banheira':
+          this.fontesUsadas.banho_banheira = true;
+          this.fontesCalculadas.push('banho_banheira');
+          break;
+        case 'banho_chuveiro':
+          this.fontesUsadas.banho_chuveiro = true;
+          this.fontesCalculadas.push('banho_chuveiro');
+          break;
+        case 'escovar_dentes':
+          this.fontesUsadas.escovar_dentes = true;
+          this.fontesCalculadas.push('escovar_dentes');
+          break;
+        case 'vaso_sanitario':
+          this.fontesUsadas.vaso_sanitario = true;
+          this.fontesCalculadas.push('vaso_sanitario');
+          break;
+        case 'lavar_loucas_maquina':
+          this.fontesUsadas.lavar_loucas_maquina = true;
+          this.fontesCalculadas.push('lavar_loucas_maquina');
+          break;
+        case 'lavar_loucas_pia':
+          this.fontesUsadas.lavar_loucas_pia = true;
+          this.fontesCalculadas.push('lavar_loucas_pia');
+          break;
+        case 'lavar_quintal_balde':
+          this.fontesUsadas.lavar_quintal_balde = true;
+          this.fontesCalculadas.push('lavar_quintal_balde');
+          break;
+        case 'lavar_quintal_mangueira':
+          this.fontesUsadas.lavar_loucas_pia = true;
+          this.fontesCalculadas.push('lavar_quintal_mangueira');
+          break;
+        case 'piscina':
+          this.fontesUsadas.piscina = true;
+          this.fontesCalculadas.push('piscina');
+          break;
       }
       this.calcular_consumo_diario(fonte);
     });
-    console.log(this.total)
+  
+    console.log(this.total);
   }
+  
 
   calcular_consumo_diario(fonteConsumo: FonteConsumo){
     this.fonteSelecionado = fonteConsumo.fonte
@@ -231,16 +262,29 @@ export class AppComponent {
        consumo = (fonteConsumo.tempo * 60) * 23 * fonteConsumo.modificador
        console.log(consumo)
         break
-      /*case 'piscina':
+      case 'piscina':
         //uma piscina perde 816 litros de agua por mes
-       consumo = 
-        break*/
+        consumo = 34
+        break
     }
 
     fonteConsumo.consumo = parseFloat(consumo.toFixed(2));
-    let consumoMensal = this.calcular_consumo_mensal(consumo, fonteConsumo.consumoSemanal)
+    let consumoMensal = 0
+    if(this.fonteSelecionado =="piscina"){
+      consumoMensal = this.calcular_consumo_mensal_piscina(consumo, fonteConsumo.consumoSemanal)
+      console.log("piscina calculada", consumoMensal)
+    }else{
+      consumoMensal = this.calcular_consumo_mensal(consumo, fonteConsumo.consumoSemanal)
+    }
     fonteConsumo.consumoMensal = parseFloat(consumoMensal.toFixed(2));
     this.total += parseFloat(consumoMensal.toFixed(2));
+  }
+
+  calcular_consumo_mensal_piscina(consumoDiarioCalc: number, consumoSemanalCalc: number){
+    let consumo: number
+    consumo = consumoDiarioCalc * consumoSemanalCalc * 7
+
+    return consumo
   }
 
   calcular_consumo_mensal(consumoDiarioCalc: number, consumoSemanalCalc: number){
